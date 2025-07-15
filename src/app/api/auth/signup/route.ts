@@ -8,7 +8,7 @@ await dbConnect();
 export async function POST(request: any) {
     try {
         const body = await request.json();
-        const { email, password } = body;
+        const { username, email, password } = body;
         
         if (!email) {
             return NextResponse.json({ error: "Email is required" }, { status: 400 });
@@ -27,11 +27,11 @@ export async function POST(request: any) {
         const hashedPassword = await bcryptjs.hash(password, await salt);
 
         const newUser = new User({
+            username,
             email,
             password: hashedPassword
         });
         const saveUser = await newUser.save();
-        console.log("User signed up successfully:", saveUser);
 
         return NextResponse.json({ message: "User signed up successfully!" }, { status: 201 });
     } catch (error: any) {
